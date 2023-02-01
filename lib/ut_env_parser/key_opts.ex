@@ -1,8 +1,25 @@
 defmodule UTEnvParser.KeyOpts do
+  @moduledoc """
+  配置项（一项环境变量）相关的选项
+
+  具体属性参考 `UTEnvParser.KeyOpts.t()` 的文档
+  """
+
   alias UTEnvParser.KeyOptsError
 
   defstruct [:name, :old_name, :type, :required, :default, :splitter, :hint]
 
+  @typedoc """
+  配置项的结构体
+
+  * `name` - 配置名称
+  * `old_name` - 旧配置名称，方便项目改名后无缝迁移
+  * `type` - 类型，见 `type()`
+  * `required` - 是否必填，有无默认值不影响
+  * `default` - 默认值
+  * `splitter` - 分隔符，仅对 `{:array, :string}` 类型使用
+  * `hint` - 错误提示
+  """
   @type t :: %__MODULE__{
           name: atom(),
           old_name: atom() | nil,
