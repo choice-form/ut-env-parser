@@ -91,6 +91,7 @@ defmodule UTEnvParser do
     end
   end
 
+  @spec load_raw_value(key_opts :: KeyOpts.t(), opts :: keyword()) :: String.t() | nil
   defp load_raw_value(key_opts, opts) do
     raw =
       case opts[:get_env_fn].(env_name(key_opts.name)) do
@@ -110,6 +111,7 @@ defmodule UTEnvParser do
     end
   end
 
+  @spec parse_value!(key_opts :: KeyOpts.t(), raw :: String.t()) :: value()
   defp parse_value!(%KeyOpts{type: :string}, raw) do
     raw
   end
