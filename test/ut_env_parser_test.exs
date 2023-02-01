@@ -351,4 +351,40 @@ defmodule UTEnvParserTest do
       assert error == %InvalidValueError{type: :boolean, key: :key, value: "abc"}
     end
   end
+
+  describe "parse/2 with old_name" do
+    test "success" do
+      assert {:ok, config} =
+               UTEnvParser.parse(
+                 [key: [type: :string, old_name: :old_key]],
+                 get_env_fn: fn
+                   "KEY" -> "abc"
+                 end
+               )
+
+      assert config == %{key: "abc"}
+
+      assert {:ok, config} =
+               UTEnvParser.parse(
+                 [key: [type: :string, old_name: :old_key]],
+                 get_env_fn: fn
+                   "KEY" -> "abc"
+                   "OLD_KEY" -> "old abc"
+                 end
+               )
+
+      assert config == %{key: "abc"}
+
+      assert {:ok, config} =
+               UTEnvParser.parse(
+                 [key: [type: :string, old_name: :old_key]],
+                 get_env_fn: fn
+                   "KEY" -> nil
+                   "OLD_KEY" -> "old abc"
+                 end
+               )
+
+      assert config == %{key: "old abc"}
+    end
+  end
 end

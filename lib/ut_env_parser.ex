@@ -85,27 +85,28 @@ defmodule UTEnvParser do
     raw_value = load_raw_value(key_opts, opts)
 
     if raw_value == nil do
-      if key_opts.required do
-        raise_required_value_error(key_opts)
-      else
-        key_opts.default
-      end
+      key_opts.default
     else
       parse_value!(key_opts, raw_value)
     end
   end
 
   defp load_raw_value(key_opts, opts) do
-    case opts[:get_env_fn].(env_name(key_opts.name)) do
-      nil ->
-        if key_opts.old_name do
-          opts[:get_env_fn].(env_name(key_opts.old_name))
-        else
-          nil
-        end
+    raw =
+      case opts[:get_env_fn].(env_name(key_opts.name)) do
+        nil ->
+          if key_opts.old_name do
+            opts[:get_env_fn].(env_name(key_opts.old_name))
+          end
 
-      val ->
-        val
+        val ->
+          val
+      end
+
+    if raw == nil && key_opts.required do
+      raise_required_value_error(key_opts)
+    else
+      raw
     end
   end
 
@@ -164,7 +165,7 @@ defmodule UTEnvParser do
   end
 
   defp raise_required_value_error(key_opts) do
-    raise RequiredValueError, key: key_opts.name
+    raise RequiredValueError, key: key_opts.name, hint: key_opts.hint
   end
 
   defp raise_invalid_value_error(key_opts, raw) do

@@ -1,10 +1,25 @@
 defmodule UTEnvParser.RequiredValueError do
-  defexception [:key]
+  defexception [:key, :old_name, :hint]
 
-  @type t :: %__MODULE__{key: atom()}
+  @type t :: %__MODULE__{
+          key: atom(),
+          old_name: atom() | nil,
+          hint: String.t() | nil
+        }
 
   @impl Exception
   def message(error) do
-    "The value of the key \"#{error.key}\" must be required"
+    msg = "The value of the key #{key_name(error)} must be required"
+    if error.hint, do: "#{msg}\nHint: #{error.hint}", else: msg
+  end
+
+  defp key_name(error) do
+    name = ~s["#{error.key}"]
+
+    if error.old_name do
+      ~s[#{name} (old name: "#{error.old_name}")]
+    else
+      name
+    end
   end
 end

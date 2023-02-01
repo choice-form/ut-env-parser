@@ -1,7 +1,7 @@
 defmodule UTEnvParser.KeyOpts do
   alias UTEnvParser.KeyOptsError
 
-  defstruct [:name, :old_name, :type, :required, :default, :splitter]
+  defstruct [:name, :old_name, :type, :required, :default, :splitter, :hint]
 
   @type t :: %__MODULE__{
           name: atom(),
@@ -9,7 +9,8 @@ defmodule UTEnvParser.KeyOpts do
           type: type(),
           required: boolean(),
           default: any() | nil,
-          splitter: String.t() | Regex.t() | nil
+          splitter: String.t() | Regex.t() | nil,
+          hint: String.t() | nil
         }
 
   @type type :: :integer | :float | :number | :boolean | :string | {:array, :string}
