@@ -7,7 +7,8 @@ defmodule UTEnvParser.MixProject do
       version: "0.1.0",
       elixir: "~> 1.14",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      aliases: aliases()
     ]
   end
 
@@ -23,5 +24,16 @@ defmodule UTEnvParser.MixProject do
     [
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false}
     ]
+  end
+
+  defp aliases do
+    [
+      "ci.check": ["format --check-formatted", "credo", &ci_test/1]
+    ]
+  end
+
+  defp ci_test(_) do
+    # 解决 ci.check 中的 MIX_ENV 是 dev ，无法运行 mix test 的问题
+    Mix.shell().cmd("mix test")
   end
 end
