@@ -29,7 +29,7 @@ defmodule UTEnvParser.MixProject do
 
   defp aliases do
     [
-      "ci.check": ["format --check-formatted", "credo", &ci_test/1]
+      "ci.check": ["format --check-formatted", "dialyzer", "credo", &ci_test/1]
     ]
   end
 

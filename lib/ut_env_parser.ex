@@ -138,7 +138,7 @@ defmodule UTEnvParser do
       {_, _} ->
         case Float.parse(raw) do
           {val, ""} -> val
-          true -> raise_invalid_value_error(key_opts, raw)
+          _ -> raise_invalid_value_error(key_opts, raw)
         end
 
       :error ->
