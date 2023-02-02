@@ -36,24 +36,26 @@ defmodule UTEnvParser do
 
   """
 
+  use TypeCheck
+
   alias UTEnvParser.{
     KeyOpts,
     RequiredValueError,
     InvalidValueError
   }
 
-  @type config :: %{optional(atom()) => any()}
+  @type! config :: %{optional(atom()) => any()}
 
-  @type value :: String.t() | number() | boolean() | [String.t()] | nil
+  @type! value :: String.t() | number() | boolean() | [String.t()] | nil
 
-  @type error :: RequiredValueError.t() | InvalidValueError.t()
+  @type! error :: RequiredValueError.t() | InvalidValueError.t()
 
   @doc """
   定义规则并解析环境变量
 
   如果解析成功会返回 `{:ok, config}` ，失败会返回 `{:error, error}` 。
   """
-  @spec parse(schema :: keyword(), opts :: keyword()) :: {:ok, config()} | {:error, error()}
+  @spec! parse(schema :: keyword(), opts :: keyword()) :: {:ok, config()} | {:error, error()}
   def parse(schema, opts \\ []) do
     {:ok, parse!(schema, opts)}
   rescue
@@ -66,7 +68,7 @@ defmodule UTEnvParser do
 
   如果解析过程出错就会抛出异常。
   """
-  @spec parse!(schema :: keyword(), opts :: keyword()) :: config()
+  @spec! parse!(schema :: keyword(), opts :: keyword()) :: config()
   def parse!(schema, opts \\ []) do
     default_opts = [get_env_fn: &System.get_env/1]
     opts = Keyword.merge(default_opts, opts)
@@ -80,7 +82,7 @@ defmodule UTEnvParser do
     end)
   end
 
-  @spec load_and_parse!(key_opts :: KeyOpts.t(), opts :: keyword()) :: value() | no_return()
+  @spec! load_and_parse!(key_opts :: KeyOpts.t(), opts :: keyword()) :: value() | no_return()
   defp load_and_parse!(key_opts, opts) do
     raw_value = load_raw_value(key_opts, opts)
 
@@ -91,7 +93,7 @@ defmodule UTEnvParser do
     end
   end
 
-  @spec load_raw_value(key_opts :: KeyOpts.t(), opts :: keyword()) :: String.t() | nil
+  @spec! load_raw_value(key_opts :: KeyOpts.t(), opts :: keyword()) :: String.t() | nil
   defp load_raw_value(key_opts, opts) do
     raw =
       case opts[:get_env_fn].(env_name(key_opts.name)) do
@@ -111,7 +113,7 @@ defmodule UTEnvParser do
     end
   end
 
-  @spec parse_value!(key_opts :: KeyOpts.t(), raw :: String.t()) :: value()
+  @spec! parse_value!(key_opts :: KeyOpts.t(), raw :: String.t()) :: value()
   defp parse_value!(%KeyOpts{type: :string}, raw) do
     raw
   end
@@ -158,7 +160,7 @@ defmodule UTEnvParser do
     String.split(raw, key_opts.splitter)
   end
 
-  @spec env_name(key :: atom()) :: String.t()
+  @spec! env_name(key :: atom()) :: String.t()
   defp env_name(key) do
     key
     |> Atom.to_string()

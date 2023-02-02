@@ -1,7 +1,9 @@
 defmodule UTEnvParser.InvalidValueError do
+  use TypeCheck
+
   defexception [:type, :key, :value]
 
-  @type t :: %__MODULE__{type: atom() | {:array, atom()}, key: atom(), value: String.t() | nil}
+  @type! t :: %__MODULE__{type: atom() | {:array, atom()}, key: atom(), value: String.t() | nil}
 
   @impl Exception
   def message(error) do

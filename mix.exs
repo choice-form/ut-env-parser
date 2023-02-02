@@ -23,7 +23,8 @@ defmodule UTEnvParser.MixProject do
   defp deps do
     [
       {:dialyxir, "~> 1.0", only: [:dev], runtime: false},
-      {:credo, "~> 1.6", only: [:dev, :test], runtime: false}
+      {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
+      {:type_check, "~> 0.13.3"}
     ]
   end
 

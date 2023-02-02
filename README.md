@@ -10,7 +10,7 @@
 def deps do
   [
     # 建议指定 tag 而不是直接使用 develop 或 main 分支
-    {:cf_auth, git: "git@github.com:choice-form/ut-env-parser.git", tag: "v0.1.0"},
+    {:ut_env_parser, git: "git@github.com:choice-form/ut-env-parser.git", tag: "v0.1.0"},
   ]
 end
 ```
