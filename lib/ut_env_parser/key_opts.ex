@@ -30,7 +30,15 @@ defmodule UTEnvParser.KeyOpts do
            hint: String.t() | nil
          }
 
-  @type! type :: :integer | :float | :number | :boolean | :string | {:array, :string}
+  @type! type ::
+           :integer
+           | :float
+           | :number
+           | :boolean
+           | :string
+           | {:array, :string}
+           | function()
+           | {:array, function()}
 
   @spec! new(opts :: keyword()) :: t()
   def new(opts) do
@@ -40,7 +48,7 @@ defmodule UTEnvParser.KeyOpts do
     |> add_type_specific_default_opts()
   end
 
-  defp add_type_specific_default_opts(%__MODULE__{type: {:array, :string}} = key_opts) do
+  defp add_type_specific_default_opts(%__MODULE__{type: {:array, _}} = key_opts) do
     %{key_opts | splitter: key_opts.splitter || ~r/\s*,\s*/}
   end
 
