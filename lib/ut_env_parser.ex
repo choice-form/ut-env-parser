@@ -215,6 +215,10 @@ defmodule UTEnvParser do
     raise RequiredValueError, key: key_opts.name, hint: key_opts.hint
   end
 
+  defp raise_invalid_value_error(%{type: parser} = key_opts, raw) when is_function(parser) do
+    raise InvalidValueError, type: :custom_parser, key: key_opts.name, value: raw
+  end
+
   defp raise_invalid_value_error(key_opts, raw) do
     raise InvalidValueError, type: key_opts.type, key: key_opts.name, value: raw
   end

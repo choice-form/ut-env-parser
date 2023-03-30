@@ -440,5 +440,15 @@ defmodule UTEnvParserTest do
 
       assert config == %{key: 1}
     end
+
+    test "invalid value" do
+      assert {:error, error} =
+               UTEnvParser.parse(
+                 [key: [type: fn value -> {:ok, String.to_integer(value)} end]],
+                 get_env_fn: fn "KEY" -> "not a number" end
+               )
+
+      assert error == %InvalidValueError{type: :custom_parser, key: :key, value: "not a number"}
+    end
   end
 end
