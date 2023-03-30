@@ -6,14 +6,19 @@ defmodule UTEnvParser do
 
   ## Examples
 
-      iex> UTEnvParser.parse!(
+      iex> ip_parser = fn string ->
+      ...>   {:ok, string |> String.split(".") |> Enum.map(&String.to_integer/1) |> List.to_tuple()}
+      ...> end
+      ...> UTEnvParser.parse!(
       ...>   [
       ...>     key_string: [type: :string],
       ...>     key_integer: [type: :integer],
       ...>     key_float: [type: :float],
       ...>     key_number: [type: :number],
       ...>     key_boolean: [type: :boolean],
-      ...>     key_array_of_string: [type: {:array, :string}]
+      ...>     key_array_of_string: [type: {:array, :string}],
+      ...>     key_ip: [type: ip_parser],
+      ...>     key_ips: [type: {:array, ip_parser}]
       ...>   ],
       ...>   # 模拟环境变量获取的函数，正式使用时默认值是 `System.get_env/1`
       ...>   get_env_fn: fn
@@ -23,6 +28,8 @@ defmodule UTEnvParser do
       ...>     "KEY_NUMBER" -> "1"
       ...>     "KEY_BOOLEAN" -> "true"
       ...>     "KEY_ARRAY_OF_STRING" -> "a,b,c"
+      ...>     "KEY_IP" -> "1.1.1.1"
+      ...>     "KEY_IPS" -> "1.1.1.1,2.2.2.2"
       ...>   end
       ...> )
       %{
@@ -31,7 +38,9 @@ defmodule UTEnvParser do
         key_float: 1.5,
         key_number: 1,
         key_boolean: true,
-        key_array_of_string: ~w[a b c]
+        key_array_of_string: ~w[a b c],
+        key_ip: {1, 1, 1, 1},
+        key_ips: [{1, 1, 1, 1}, {2, 2, 2, 2}]
       }
 
   """
@@ -46,7 +55,7 @@ defmodule UTEnvParser do
 
   @type! config :: %{optional(atom()) => any()}
 
-  @type! value :: String.t() | number() | boolean() | [String.t()] | nil
+  @type! value :: String.t() | number() | boolean() | tuple() | list() | nil
 
   @type! error :: RequiredValueError.t() | InvalidValueError.t()
 
@@ -158,6 +167,40 @@ defmodule UTEnvParser do
 
   defp parse_value!(%KeyOpts{type: {:array, :string}} = key_opts, raw) do
     String.split(raw, key_opts.splitter)
+  end
+
+  defp parse_value!(%KeyOpts{type: custom_parser} = key_opts, raw)
+       when is_function(custom_parser) do
+    case do_custom_parse_by(raw, custom_parser) do
+      {:ok, value} -> value
+      _ -> raise_invalid_value_error(key_opts, raw)
+    end
+  end
+
+  defp parse_value!(%KeyOpts{type: {:array, custom_parser}} = key_opts, raw)
+       when is_function(custom_parser) do
+    raw
+    |> String.split(key_opts.splitter)
+    |> Enum.reduce_while([], fn single_raw, acc ->
+      case do_custom_parse_by(single_raw, custom_parser) do
+        {:ok, value} -> {:cont, [value | acc]}
+        _ -> {:halt, :error}
+      end
+    end)
+    |> case do
+      :error -> raise_invalid_value_error(key_opts, raw)
+      values -> Enum.reverse(values)
+    end
+  end
+
+  @spec! do_custom_parse_by(String.t(), fun()) :: {:ok, any()} | :error
+  defp do_custom_parse_by(raw, parser) do
+    case parser.(raw) do
+      {:ok, value} -> {:ok, value}
+      _ -> :error
+    end
+  rescue
+    _ -> :error
   end
 
   @spec! env_name(key :: atom()) :: String.t()
