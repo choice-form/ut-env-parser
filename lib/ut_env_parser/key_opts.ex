@@ -5,8 +5,6 @@ defmodule UTEnvParser.KeyOpts do
   具体属性参考 `UTEnvParser.KeyOpts.t()` 的文档
   """
 
-  use TypeCheck
-
   defstruct [:name, :old_name, :type, :required, :default, :splitter, :hint]
 
   @typedoc """
@@ -20,27 +18,27 @@ defmodule UTEnvParser.KeyOpts do
   * `splitter` - 分隔符，仅对 `{:array, :string}` 类型使用
   * `hint` - 错误提示
   """
-  @type! t :: %__MODULE__{
-           name: atom(),
-           old_name: atom() | nil,
-           type: type(),
-           required: boolean(),
-           default: any() | nil,
-           splitter: String.t() | Regex.t() | nil,
-           hint: String.t() | nil
-         }
+  @type t :: %__MODULE__{
+          name: atom(),
+          old_name: atom() | nil,
+          type: type(),
+          required: boolean(),
+          default: any() | nil,
+          splitter: String.t() | Regex.t() | nil,
+          hint: String.t() | nil
+        }
 
-  @type! type ::
-           :integer
-           | :float
-           | :number
-           | :boolean
-           | :string
-           | {:array, :string}
-           | function()
-           | {:array, function()}
+  @type type ::
+          :integer
+          | :float
+          | :number
+          | :boolean
+          | :string
+          | {:array, :string}
+          | function()
+          | {:array, function()}
 
-  @spec! new(opts :: keyword()) :: t()
+  @spec new(opts :: keyword()) :: t()
   def new(opts) do
     default_opts = [required: false]
 

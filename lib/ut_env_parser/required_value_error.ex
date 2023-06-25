@@ -1,13 +1,11 @@
 defmodule UTEnvParser.RequiredValueError do
-  use TypeCheck
-
   defexception [:key, :old_name, :hint]
 
-  @type! t :: %__MODULE__{
-           key: atom(),
-           old_name: atom() | nil,
-           hint: String.t() | nil
-         }
+  @type t :: %__MODULE__{
+          key: atom(),
+          old_name: atom() | nil,
+          hint: String.t() | nil
+        }
 
   @impl Exception
   def message(error) do
@@ -15,7 +13,7 @@ defmodule UTEnvParser.RequiredValueError do
     if error.hint, do: "#{msg}\nHint: #{error.hint}", else: msg
   end
 
-  @spec! key_name(error :: t()) :: String.t()
+  @spec key_name(error :: t()) :: String.t()
   defp key_name(error) do
     name = ~s["#{error.key}"]
 
