@@ -1,7 +1,7 @@
-defmodule UTEnvParser.RequiredValueErrorTest do
+defmodule UtEnvParser.RequiredValueErrorTest do
   use ExUnit.Case, async: true
 
-  alias UTEnvParser.RequiredValueError
+  alias UtEnvParser.RequiredValueError
 
   describe "message/1" do
     test "with key" do

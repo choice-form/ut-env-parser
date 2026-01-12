@@ -1,4 +1,4 @@
-defmodule UTEnvParser do
+defmodule UtEnvParser do
   @moduledoc """
   环境变量的解析器
 
@@ -9,7 +9,7 @@ defmodule UTEnvParser do
       iex> ip_parser = fn string ->
       ...>   {:ok, string |> String.split(".") |> Enum.map(&String.to_integer/1) |> List.to_tuple()}
       ...> end
-      ...> UTEnvParser.parse!(
+      ...> UtEnvParser.parse!(
       ...>   [
       ...>     key_string: [type: :string],
       ...>     key_integer: [type: :integer],
@@ -45,7 +45,7 @@ defmodule UTEnvParser do
 
   """
 
-  alias UTEnvParser.{
+  alias UtEnvParser.{
     KeyOpts,
     RequiredValueError,
     InvalidValueError

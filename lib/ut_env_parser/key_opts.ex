@@ -1,8 +1,8 @@
-defmodule UTEnvParser.KeyOpts do
+defmodule UtEnvParser.KeyOpts do
   @moduledoc """
   配置项（一项环境变量）相关的选项
 
-  具体属性参考 `UTEnvParser.KeyOpts.t()` 的文档
+  具体属性参考 `UtEnvParser.KeyOpts.t()` 的文档
   """
 
   defstruct [:name, :old_name, :type, :required, :default, :splitter, :hint]

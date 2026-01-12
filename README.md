@@ -1,6 +1,6 @@
-# UTEnvParser
+# UtEnvParser
 
-环境变量的解析器。具体见 `UTEnvParser` 模块文档。
+环境变量的解析器。具体见 `UtEnvParser` 模块文档。
 
 ## 安装
 

@@ -1,4 +1,4 @@
-defmodule UTEnvParser.RequiredValueError do
+defmodule UtEnvParser.RequiredValueError do
   defexception [:key, :old_name, :hint]
 
   @type t :: %__MODULE__{

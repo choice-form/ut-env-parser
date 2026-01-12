@@ -1,4 +1,4 @@
-defmodule UTEnvParser.MixProject do
+defmodule UtEnvParser.MixProject do
   use Mix.Project
 
   def project do
@@ -29,7 +29,13 @@ defmodule UTEnvParser.MixProject do
 
   defp aliases do
     [
-      "ci.check": ["format --check-formatted", "dialyzer", "credo", &ci_test/1]
+      check: [
+        "format --check-formatted",
+        "compile --warnings-as-errors",
+        &ci_test/1,
+        "dialyzer",
+        "credo"
+      ]
     ]
   end
 

@@ -1,9 +1,9 @@
-defmodule UTEnvParserTest do
+defmodule UtEnvParserTest do
   use ExUnit.Case, async: true
-  doctest UTEnvParser
+  doctest UtEnvParser
 
-  alias UTEnvParser.RequiredValueError
-  alias UTEnvParser.InvalidValueError
+  alias UtEnvParser.RequiredValueError
+  alias UtEnvParser.InvalidValueError
 
   describe "parse/2 with multiple opts" do
     test "success" do
@@ -16,7 +16,7 @@ defmodule UTEnvParserTest do
       end
 
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [
                    key_string: [type: :string],
                    key_integer: [type: :integer],
@@ -55,7 +55,7 @@ defmodule UTEnvParserTest do
   describe "parse/2 with string" do
     test "required" do
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :string, required: true]],
                  get_env_fn: fn "KEY" -> "str" end
                )
@@ -63,7 +63,7 @@ defmodule UTEnvParserTest do
       assert config == %{key: "str"}
 
       assert {:error, error} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :string, required: true]],
                  get_env_fn: fn "KEY" -> nil end
                )
@@ -73,7 +73,7 @@ defmodule UTEnvParserTest do
 
     test "no value" do
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :string]],
                  get_env_fn: fn "KEY" -> nil end
                )
@@ -83,7 +83,7 @@ defmodule UTEnvParserTest do
 
     test "no value with default" do
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :string, default: "abc"]],
                  get_env_fn: fn "KEY" -> nil end
                )
@@ -93,7 +93,7 @@ defmodule UTEnvParserTest do
 
     test "valid value" do
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :string]],
                  get_env_fn: fn "KEY" -> "str" end
                )
@@ -105,7 +105,7 @@ defmodule UTEnvParserTest do
   describe "parse/2 with integer" do
     test "required" do
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :integer, required: true]],
                  get_env_fn: fn "KEY" -> "1" end
                )
@@ -113,7 +113,7 @@ defmodule UTEnvParserTest do
       assert config == %{key: 1}
 
       assert {:error, error} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :integer, required: true]],
                  get_env_fn: fn "KEY" -> nil end
                )
@@ -123,7 +123,7 @@ defmodule UTEnvParserTest do
 
     test "no value" do
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :integer]],
                  get_env_fn: fn "KEY" -> nil end
                )
@@ -133,7 +133,7 @@ defmodule UTEnvParserTest do
 
     test "no value with default" do
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :integer, default: 1]],
                  get_env_fn: fn "KEY" -> nil end
                )
@@ -143,7 +143,7 @@ defmodule UTEnvParserTest do
 
     test "valid value" do
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :integer]],
                  get_env_fn: fn "KEY" -> "1" end
                )
@@ -153,7 +153,7 @@ defmodule UTEnvParserTest do
 
     test "invalid value" do
       assert {:error, error} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :integer]],
                  get_env_fn: fn "KEY" -> "abc" end
                )
@@ -165,7 +165,7 @@ defmodule UTEnvParserTest do
   describe "parse/2 with float" do
     test "required" do
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :float, required: true]],
                  get_env_fn: fn "KEY" -> "1.5" end
                )
@@ -173,7 +173,7 @@ defmodule UTEnvParserTest do
       assert config == %{key: 1.5}
 
       assert {:error, error} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :float, required: true]],
                  get_env_fn: fn "KEY" -> nil end
                )
@@ -183,7 +183,7 @@ defmodule UTEnvParserTest do
 
     test "no value" do
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :float]],
                  get_env_fn: fn "KEY" -> nil end
                )
@@ -193,7 +193,7 @@ defmodule UTEnvParserTest do
 
     test "no value with default" do
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :float, default: 1.5]],
                  get_env_fn: fn "KEY" -> nil end
                )
@@ -203,7 +203,7 @@ defmodule UTEnvParserTest do
 
     test "valid value" do
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :float]],
                  get_env_fn: fn "KEY" -> "1.5" end
                )
@@ -211,7 +211,7 @@ defmodule UTEnvParserTest do
       assert config == %{key: 1.5}
 
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :float]],
                  get_env_fn: fn "KEY" -> "1" end
                )
@@ -221,7 +221,7 @@ defmodule UTEnvParserTest do
 
     test "invalid value" do
       assert {:error, error} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :float]],
                  get_env_fn: fn "KEY" -> "abc" end
                )
@@ -233,7 +233,7 @@ defmodule UTEnvParserTest do
   describe "parse/2 with number" do
     test "required" do
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :number, required: true]],
                  get_env_fn: fn "KEY" -> "1.5" end
                )
@@ -241,7 +241,7 @@ defmodule UTEnvParserTest do
       assert config == %{key: 1.5}
 
       assert {:error, error} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :number, required: true]],
                  get_env_fn: fn "KEY" -> nil end
                )
@@ -251,7 +251,7 @@ defmodule UTEnvParserTest do
 
     test "no value" do
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :number]],
                  get_env_fn: fn "KEY" -> nil end
                )
@@ -261,7 +261,7 @@ defmodule UTEnvParserTest do
 
     test "no value with default" do
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :number, default: 1.5]],
                  get_env_fn: fn "KEY" -> nil end
                )
@@ -271,7 +271,7 @@ defmodule UTEnvParserTest do
 
     test "valid value" do
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :number]],
                  get_env_fn: fn "KEY" -> "1" end
                )
@@ -279,7 +279,7 @@ defmodule UTEnvParserTest do
       assert config == %{key: 1}
 
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :number]],
                  get_env_fn: fn "KEY" -> "1.5" end
                )
@@ -289,7 +289,7 @@ defmodule UTEnvParserTest do
 
     test "invalid value" do
       assert {:error, error} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :number]],
                  get_env_fn: fn "KEY" -> "abc" end
                )
@@ -301,7 +301,7 @@ defmodule UTEnvParserTest do
   describe "parse/2 with boolean" do
     test "required" do
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :boolean, required: true]],
                  get_env_fn: fn "KEY" -> "true" end
                )
@@ -309,7 +309,7 @@ defmodule UTEnvParserTest do
       assert config == %{key: true}
 
       assert {:error, error} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :number, required: true]],
                  get_env_fn: fn "KEY" -> nil end
                )
@@ -319,7 +319,7 @@ defmodule UTEnvParserTest do
 
     test "no value" do
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :boolean]],
                  get_env_fn: fn "KEY" -> nil end
                )
@@ -329,7 +329,7 @@ defmodule UTEnvParserTest do
 
     test "no value with default" do
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :boolean, default: false]],
                  get_env_fn: fn "KEY" -> nil end
                )
@@ -339,7 +339,7 @@ defmodule UTEnvParserTest do
 
     test "valid value" do
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :boolean]],
                  get_env_fn: fn "KEY" -> "true" end
                )
@@ -347,7 +347,7 @@ defmodule UTEnvParserTest do
       assert config == %{key: true}
 
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :boolean]],
                  get_env_fn: fn "KEY" -> "false" end
                )
@@ -357,7 +357,7 @@ defmodule UTEnvParserTest do
 
     test "invalid value" do
       assert {:error, error} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :boolean]],
                  get_env_fn: fn "KEY" -> "abc" end
                )
@@ -369,7 +369,7 @@ defmodule UTEnvParserTest do
   describe "parse/2 with old_name" do
     test "success" do
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :string, old_name: :old_key]],
                  get_env_fn: fn
                    "KEY" -> "abc"
@@ -379,7 +379,7 @@ defmodule UTEnvParserTest do
       assert config == %{key: "abc"}
 
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :string, old_name: :old_key]],
                  get_env_fn: fn
                    "KEY" -> "abc"
@@ -390,7 +390,7 @@ defmodule UTEnvParserTest do
       assert config == %{key: "abc"}
 
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: :string, old_name: :old_key]],
                  get_env_fn: fn
                    "KEY" -> nil
@@ -405,7 +405,7 @@ defmodule UTEnvParserTest do
   describe "parse/2 with function" do
     test "required" do
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: fn value -> {:ok, String.to_integer(value)} end, required: true]],
                  get_env_fn: fn "KEY" -> "1" end
                )
@@ -413,7 +413,7 @@ defmodule UTEnvParserTest do
       assert config == %{key: 1}
 
       assert {:error, error} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: fn value -> {:ok, String.to_integer(value)} end, required: true]],
                  get_env_fn: fn "KEY" -> nil end
                )
@@ -423,7 +423,7 @@ defmodule UTEnvParserTest do
 
     test "no value" do
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: fn value -> {:ok, String.to_integer(value)} end]],
                  get_env_fn: fn "KEY" -> nil end
                )
@@ -433,7 +433,7 @@ defmodule UTEnvParserTest do
 
     test "no value with default" do
       assert {:ok, config} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: fn value -> {:ok, String.to_integer(value)} end, default: 1]],
                  get_env_fn: fn "KEY" -> nil end
                )
@@ -443,7 +443,7 @@ defmodule UTEnvParserTest do
 
     test "invalid value" do
       assert {:error, error} =
-               UTEnvParser.parse(
+               UtEnvParser.parse(
                  [key: [type: fn value -> {:ok, String.to_integer(value)} end]],
                  get_env_fn: fn "KEY" -> "not a number" end
                )

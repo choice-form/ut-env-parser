@@ -1,4 +1,4 @@
-defmodule UTEnvParser.InvalidValueError do
+defmodule UtEnvParser.InvalidValueError do
   defexception [:type, :key, :value]
 
   @type t :: %__MODULE__{type: atom() | {:array, atom()}, key: atom(), value: String.t() | nil}
